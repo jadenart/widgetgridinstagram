@@ -670,7 +670,21 @@ let filteredPosts = [];
 let currentFilter = 'all';
 let dragSrcIndex = null;
 
-const PROXY = 'https://api.allorigins.win/raw?url=';
+const PROXIES = [
+  'https://corsproxy.io/?',
+  'https://api.allorigins.win/raw?url=',
+];
+
+async function fetchWithProxy(url, opts) {
+  for (const proxy of PROXIES) {
+    try {
+      const proxyUrl = proxy + encodeURIComponent(url);
+      const res = await fetch(proxyUrl, opts);
+      if (res.ok) return res;
+    } catch(e) { continue; }
+  }
+  throw new Error('Não foi possível conectar ao Notion. Verifique o token e tente novamente.');
+}
 
 // ── Persistence ───────────────────────────────────
 function saveConfig() {
@@ -742,7 +756,7 @@ function showWidget() {
 
 // ── Notion API ────────────────────────────────────
 async function notionRequest(path, method='GET', body=null) {
-  const url = PROXY + encodeURIComponent('https://api.notion.com/v1' + path);
+  const notionUrl = 'https://api.notion.com/v1' + path;
   const opts = {
     method,
     headers: {
@@ -752,7 +766,7 @@ async function notionRequest(path, method='GET', body=null) {
     }
   };
   if (body) opts.body = JSON.stringify(body);
-  const res = await fetch(url, opts);
+  const res = await fetchWithProxy(notionUrl, opts);
   if (!res.ok) {
     const err = await res.json().catch(()=>({message:'Erro desconhecido'}));
     throw new Error(err.message || 'Erro ' + res.status);
