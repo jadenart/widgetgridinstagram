@@ -626,17 +626,17 @@
   <div class="filter-bar">
     <span class="filter-label">Filtrar:</span>
     <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">Todos</button>
-    <button class="filter-chip" data-filter="Approved" onclick="setFilter('Approved', this)">
+    <button class="filter-chip" data-filter="Aprovados" onclick="setFilter('Aprovados', this)">
       <span class="status-dot" style="background:var(--approved)"></span>Aprovados
     </button>
-    <button class="filter-chip" data-filter="Scheduled" onclick="setFilter('Scheduled', this)">
-      <span class="status-dot" style="background:var(--scheduled)"></span>Agendados
+    <button class="filter-chip" data-filter="Aguardando aprovação" onclick="setFilter('Aguardando aprovação', this)">
+      <span class="status-dot" style="background:var(--draft)"></span>Aguardando
     </button>
-    <button class="filter-chip" data-filter="Draft" onclick="setFilter('Draft', this)">
-      <span class="status-dot" style="background:var(--draft)"></span>Rascunhos
+    <button class="filter-chip" data-filter="Alteração solicitada" onclick="setFilter('Alteração solicitada', this)">
+      <span class="status-dot" style="background:#c0392b"></span>Alteração
     </button>
-    <button class="filter-chip" data-filter="Idea" onclick="setFilter('Idea', this)">
-      <span class="status-dot" style="background:#7a4fa5"></span>Ideias
+    <button class="filter-chip" data-filter="Postado" onclick="setFilter('Postado', this)">
+      <span class="status-dot" style="background:var(--scheduled)"></span>Postado
     </button>
   </div>
 
@@ -659,9 +659,12 @@
 <script>
 // ── State ─────────────────────────────────────────
 let cfg = {
-  token: '', dbId: '',
-  imgProp: 'Image URL', titleProp: 'Name',
-  statusProp: 'Status', dateProp: 'Schedule Date',
+  token: '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',
+  dbId: '331336c9e9da802c9241ffcfc44a9e18',
+  imgProp: 'Image URL',
+  titleProp: 'Nome',
+  statusProp: 'Status',
+  dateProp: 'Data',
   orderProp: 'Grid Order'
 };
 
@@ -725,10 +728,8 @@ function loadConfig() {
 
 // ── Init ──────────────────────────────────────────
 window.addEventListener('DOMContentLoaded', () => {
-  if (loadConfig() && cfg.token && cfg.dbId) {
-    showWidget();
-    loadPosts();
-  }
+  showWidget();
+  loadPosts();
 });
 
 // ── Connect ───────────────────────────────────────
@@ -1026,10 +1027,10 @@ function setCols(n, el) {
 function getStatusClass(s) {
   if (!s) return '';
   const l = s.toLowerCase();
-  if (l.includes('approv') || l.includes('aprovad')) return 'status-approved';
-  if (l.includes('draft') || l.includes('rascun'))  return 'status-draft';
-  if (l.includes('schedul') || l.includes('agend'))  return 'status-scheduled';
-  if (l.includes('idea') || l.includes('ideia'))     return 'status-idea';
+  if (l.includes('aprovad')) return 'status-approved';
+  if (l.includes('aguardando')) return 'status-draft';
+  if (l.includes('alteração') || l.includes('alteracao')) return 'status-idea';
+  if (l.includes('postado')) return 'status-scheduled';
   return 'status-draft';
 }
 
