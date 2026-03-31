@@ -727,9 +727,31 @@ function loadConfig() {
 }
 
 // ── Init ──────────────────────────────────────────
+const DEFAULTS = {
+  token: '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',
+  dbId: '331336c9e9da802c9241ffcfc44a9e18',
+  imgProp: 'Image URL',
+  titleProp: 'Nome',
+  statusProp: 'Status',
+  dateProp: 'Data',
+  orderProp: 'Grid Order'
+};
+
 window.addEventListener('DOMContentLoaded', () => {
-  showWidget();
-  loadPosts();
+  // Pre-fill setup form with defaults
+  document.getElementById('token-input').value = DEFAULTS.token;
+  document.getElementById('db-input').value = DEFAULTS.dbId;
+  document.getElementById('img-prop-input').value = DEFAULTS.imgProp;
+  document.getElementById('title-prop-input').value = DEFAULTS.titleProp;
+  document.getElementById('status-prop-input').value = DEFAULTS.statusProp;
+  document.getElementById('date-prop-input').value = DEFAULTS.dateProp;
+  document.getElementById('order-prop-input').value = DEFAULTS.orderProp;
+
+  // Try localStorage first
+  if (loadConfig() && cfg.token && cfg.dbId) {
+    showWidget();
+    loadPosts();
+  }
 });
 
 // ── Connect ───────────────────────────────────────
